@@ -53,5 +53,15 @@ export class LiquidPlannerApiService {
       return tasks
   }
 
+  public async logTimeAgainstTask(
+    task_id: number,
+    workObj: {
+      activity_id: number,
+      work: number
+    }
+  ): Promise<void> {
+    await this.client.post(`tasks/${task_id}/track_time`, { workObj })
+  }
+
 
 }
