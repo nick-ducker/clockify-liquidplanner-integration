@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { LiquidPlannerApiService } from 'src/liquid-planner-api/liquid-planner-api.service';
 import { ClockifyTimerStoppedDto, ClockifyTimerStoppedTimeInvervalDto } from './dtos/clockifyEntryDto.dto';
 
 @Injectable()
 export class SundailService {
+  constructor(private readonly lp: LiquidPlannerApiService) {}
 
   // PRIVATE FUNCTIONS
   private getActivityId() {
@@ -37,25 +39,25 @@ export class SundailService {
     return ''
   }
 
-  public async determineLpEntityId(lpFlag: string): Promise<string> {
+  public async determineLpEntityId(lpFlag: string): Promise<number> {
     const flagLength = lpFlag.split('').length
     if(flagLength <= 5) {
       console.log('Zoho ticket ID detected')
       console.log('Searching LP using naming convention "ZOHO-${lpFlag}')
 
-      const { data } = await this.lp.getTasks({
+      const tasks = await this.lp.getTasks({
         filters: [{
           filter: 'name',
           operator: 'contains',
           term: `ZOHO-${lpFlag}`
         }]
       })
-      return data.id
+      return tasks[0].id
     }
   }
 
   public async updateLpEntity(
-    lpId: string, 
+    lpId: number, 
     event: ClockifyTimerStoppedDto
   ): Promise<void>{
     const duration = this.calculateTimeDecimal(event.timeInterval)

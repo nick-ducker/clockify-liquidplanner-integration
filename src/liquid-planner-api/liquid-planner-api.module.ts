@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { LiquidPlannerApiService } from './liquid-planner-api.service';
 
-@Module({})
+@Module({
+  providers: [LiquidPlannerApiService]
+})
 export class LiquidPlannerApiModule {}
