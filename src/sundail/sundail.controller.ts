@@ -20,7 +20,7 @@ export class SundailController {
         const lpId = await this.sundailService.determineLpEntityId(lpFlag)
 
         console.log("Updating LP entry")
-        await this.sundailService.updateLpEntity(lpId, clockifyTimerStoppedDto.timeInterval.duration)
+        await this.sundailService.updateLpEntity(lpId, clockifyTimerStoppedDto)
       }
     } catch (e) {
       throw new HttpException(
