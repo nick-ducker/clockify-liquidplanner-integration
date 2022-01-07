@@ -23,6 +23,7 @@ export class SundailController {
         await this.sundailService.updateLpEntity(lpId, clockifyTimerStoppedDto)
       }
     } catch (e) {
+      console.log(e)
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,

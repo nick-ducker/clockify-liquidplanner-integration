@@ -22,7 +22,7 @@ export class SundailService {
 
   private calculateTimeDecimal(timeInterval: ClockifyTimerStoppedTimeInvervalDto) {
     const startDate = new Date(`${timeInterval.start}`)
-    const endDate = new Date(`${timeInterval.start}`)
+    const endDate = new Date(`${timeInterval.end}`)
     const seconds = (endDate.getTime() - startDate.getTime()) / 1000
     const decimalHours = (seconds / 3600)
 
@@ -43,7 +43,7 @@ export class SundailService {
     const flagLength = lpFlag.split('').length
     if(flagLength <= 5) {
       console.log('Zoho ticket ID detected')
-      console.log('Searching LP using naming convention "ZOHO-${lpFlag}')
+      console.log(`Searching LP using naming convention "ZOHO-${lpFlag}"`)
 
       const tasks = await this.lp.getTasks({
         filters: [{
@@ -52,6 +52,11 @@ export class SundailService {
           term: `ZOHO-${lpFlag}`
         }]
       })
+
+      if(tasks.length > 1) {
+        throw new Error('Multiple results returned for search, aborting')
+      }
+      
       return tasks[0].id
     }
   }
@@ -63,7 +68,7 @@ export class SundailService {
     const duration = this.calculateTimeDecimal(event.timeInterval)
     let activityId = 293194 //Billable Activity
     if(event.tags.length > 0) {
-      activityId = this.getActivityId()[event.tags[0]]
+      activityId = this.getActivityId()[event.tags[0].toLowerCase()]
     }
     
     await this.lp.logTimeAgainstTask(

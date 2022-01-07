@@ -38,8 +38,13 @@ export class LiquidPlannerApiService {
     options?: GetTaskOptionsInterface
   ): Promise<LiquidPlannerTaskDto[]> {
       let tasks: LiquidPlannerTaskDto[]
-
-      const { data } = await this.client.get(`tasks`);
+      let filterString = ''
+      if(options){
+        options.filters.forEach((e, i) => {
+          filterString +=`${i > 0 ? '&' : '?'}filter=${e.filter} ${e.operator} ${e.term}`
+        })
+      }
+      const { data } = await this.client.get(`tasks${filterString}`);
       tasks = data;
 
       if (!tasks) {
@@ -60,8 +65,7 @@ export class LiquidPlannerApiService {
       work: number
     }
   ): Promise<void> {
-    await this.client.post(`tasks/${task_id}/track_time`, { workObj })
+    await this.client.post(`tasks/${task_id}/track_time?append=true`, { ...workObj })
+    console.log(`Lp Task ${task_id} updated`)
   }
-
-
 }
