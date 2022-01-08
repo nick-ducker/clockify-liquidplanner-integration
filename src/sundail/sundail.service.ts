@@ -65,11 +65,9 @@ export class SundailService {
     const duration = this.calculateTimeDecimal(event.timeInterval)
     // TEST THAT IT WILL FAIL WITHOUT AN ACTIVITY ID
     let activityId = 293194 //Billable Activity Default
-    if(event.tags.length > 0) {
-      activityId = this.clockify.getActivityId[event.tags[0]]
+    if(event.tags.length === 1) {
+      activityId = this.clockify.getActivityId[event.tags[0].id]
     }
-    
-
     //TODO: Update this task to take a user ID
     await this.lp.logTimeAgainstTask(
       lpId, {
@@ -83,9 +81,18 @@ export class SundailService {
     event: ClockifyTimerStoppedDto
   ): Promise<void>{
     const loggedTagId = this.clockify.getLoggedTagId
+    let tagIdsArr = event.tags.map(tag => tag.id)
+    tagIdsArr.push(loggedTagId)
 
     await this.clockify.updateClockifyEntry(event.id, {
-      tagIds: [...event.tags, loggedTagId]
+      start: event.timeInterval.start,
+      billable: event.billable,
+      description: event.description,
+      projectId: event.project,
+      taskId: event.task,
+      end: event.timeInterval.end,
+      tagIds: tagIdsArr,
+      customFields: event.customFieldValues
     })
   }
 }

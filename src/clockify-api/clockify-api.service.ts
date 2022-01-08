@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
+import { ClockifyTimerStoppedDto } from './dtos/clockifyEntryDto.dto';
 import { ClockifyEntryPostInterface } from './interfaces/clockifyEntryPost.interface';
 @Injectable()
 export class ClockifyApiService {
@@ -55,6 +56,6 @@ export class ClockifyApiService {
     id: string,
     entry: ClockifyEntryPostInterface
   ) {
-    await this.client.post(`time-entries/${id}`, entry)
+    await this.client.put(`time-entries/${id}`, entry)
   }
 }

@@ -1,15 +1,12 @@
+import { ClockifyTimerStoppedCustomFieldsDto } from "../dtos/clockifyEntryDto.dto";
+
 export type ClockifyEntryPostInterface = {
-  start?: string,
-  billable?: boolean,
-  description?: string,
-  projectId?: string,
-  taskId?: string,
-  end?: string,
-  tagIds?: string[],
-  customFields?: {
-      customFieldId?: string,
-      timeEntryId?: string,
-      value?: string
-  }[]
-  
+  start: string,
+  billable: boolean,
+  description: string,
+  projectId: string | null,
+  taskId: string | null,
+  end: string,
+  tagIds: string[],
+  customFields: ClockifyTimerStoppedCustomFieldsDto[]
 }
