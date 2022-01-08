@@ -6,6 +6,6 @@ import { SundailService } from './sundail.service';
 
 @Module({
   controllers: [SundailController],
-  providers: [SundailService, LiquidPlannerApiService, ClockifyApiService]
+  providers: [SundailService, LiquidPlannerApiService, ClockifyApiService],
 })
 export class SundailModule {}

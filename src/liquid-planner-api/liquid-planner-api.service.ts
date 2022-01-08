@@ -21,51 +21,55 @@ export class LiquidPlannerApiService {
   }
 
   get apiBase(): string {
-    return `https://app.liquidplanner.com/api/v1/workspaces/${this.workspace}`
+    return `https://app.liquidplanner.com/api/v1/workspaces/${this.workspace}`;
   }
 
   get apiHeaders(): Record<string, string> {
     return {
-      'Authorization': `Bearer ${process.env.LP_API_KEY}`,
-    }
+      Authorization: `Bearer ${process.env.LP_API_KEY}`,
+    };
   }
 
   get workspace(): number {
-    return 192004 // Atomix
+    return 192004; // Atomix
   }
 
   public async getTasks(
-    options?: GetTaskOptionsInterface
+    options?: GetTaskOptionsInterface,
   ): Promise<LiquidPlannerTaskDto[]> {
-      let tasks: LiquidPlannerTaskDto[]
-      let filterString = ''
-      if(options){
-        options.filters.forEach((e, i) => {
-          filterString +=`${i > 0 ? '&' : '?'}filter=${e.filter} ${e.operator} ${e.term}`
-        })
-      }
-      const { data } = await this.client.get(`tasks${filterString}`);
-      tasks = data;
+    let tasks: LiquidPlannerTaskDto[];
+    let filterString = '';
+    if (options) {
+      options.filters.forEach((e, i) => {
+        filterString += `${i > 0 ? '&' : '?'}filter=${e.filter} ${e.operator} ${
+          e.term
+        }`;
+      });
+    }
+    const { data } = await this.client.get(`tasks${filterString}`);
+    tasks = data;
 
-      if (!tasks) {
-        let optionsString = ''
-        if(options) {
-          optionsString = ` with filters: ${JSON.stringify(options)}`
-        }
-        throw new Error(`Failed to get tasks${optionsString}`);
+    if (!tasks) {
+      let optionsString = '';
+      if (options) {
+        optionsString = ` with filters: ${JSON.stringify(options)}`;
       }
+      throw new Error(`Failed to get tasks${optionsString}`);
+    }
 
-      return tasks
+    return tasks;
   }
 
   public async logTimeAgainstTask(
     task_id: number,
     workObj: {
-      activity_id: number,
-      work: number
-    }
+      activity_id: number;
+      work: number;
+    },
   ): Promise<void> {
-    await this.client.post(`tasks/${task_id}/track_time?append=true`, { ...workObj })
-    console.log(`Lp Task ${task_id} updated`)
+    await this.client.post(`tasks/${task_id}/track_time?append=true`, {
+      ...workObj,
+    });
+    console.log(`Lp Task ${task_id} updated`);
   }
 }

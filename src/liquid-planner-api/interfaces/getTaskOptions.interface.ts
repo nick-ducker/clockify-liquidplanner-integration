@@ -1,9 +1,9 @@
 export interface GetTaskOptionsInterface {
-  filters: Filter[]
+  filters: Filter[];
 }
 
 type Filter = {
-  filter: 'name'
-  operator: 'contains'
-  term: string
-}
+  filter: 'name';
+  operator: 'contains';
+  term: string;
+};

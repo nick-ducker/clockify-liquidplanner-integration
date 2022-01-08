@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { ClockifyApiService } from './clockify-api.service';
 
 @Module({
-  providers: [ClockifyApiService]
+  providers: [ClockifyApiService],
 })
 export class ClockifyApiModule {}

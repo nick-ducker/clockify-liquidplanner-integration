@@ -4,5 +4,5 @@ export type LiquidPlannerTaskDto = Record<string, unknown> & {
   project_id: number;
   custom_field_values: Record<string, any>;
   work: number;
-  parent_crumbs: string[]
+  parent_crumbs: string[];
 };
