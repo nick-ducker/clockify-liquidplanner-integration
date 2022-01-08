@@ -41,6 +41,7 @@ export class SundailService {
 
   public async determineLpEntityId(lpFlag: string): Promise<number> {
     const flagLength = lpFlag.split('').length
+    let lpId: number
     if(flagLength <= 5) {
       console.log('Zoho ticket ID detected')
       console.log(`Searching LP using naming convention "ZOHO-${lpFlag}"`)
@@ -56,9 +57,14 @@ export class SundailService {
       if(tasks.length > 1) {
         throw new Error('Multiple results returned for search, aborting')
       }
-      
-      return tasks[0].id
+
+      lpId = tasks[0].id
+    } else {
+      console.log('LP Task ID detected')
+      lpId = Number(lpFlag)
     }
+
+    return lpId
   }
 
   public async updateLpEntity(

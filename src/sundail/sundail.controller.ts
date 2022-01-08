@@ -10,7 +10,6 @@ export class SundailController {
 
   @Post('/clockify-timer-stopped')
   async processEntry(@Body() clockifyTimerStoppedDto: ClockifyTimerStoppedDto): Promise<void> {
-    // return this.sundailService.doSomething();
     try {
       console.log("checking entry description for LP flags")
       const lpFlag = this.sundailService.checkTimerEvent(clockifyTimerStoppedDto.description)
