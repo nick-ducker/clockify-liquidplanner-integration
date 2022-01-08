@@ -22,4 +22,7 @@ COPY --from=development /usr/src/app/package*.json /usr/src/app/
 COPY --from=development /usr/src/app/node_modules/ /usr/src/app/node_modules/
 COPY --from=development /usr/src/app/dist/ /usr/src/app/dist/
 
+RUN adduser -D node
+USER node
+
 CMD ["node", "dist/main.js"]
