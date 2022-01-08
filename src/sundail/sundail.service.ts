@@ -1,26 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { ClockifyApiService } from 'src/clockify-api/clockify-api.service';
 import { LiquidPlannerApiService } from 'src/liquid-planner-api/liquid-planner-api.service';
-import { ClockifyTimerStoppedDto, ClockifyTimerStoppedTimeInvervalDto } from './dtos/clockifyEntryDto.dto';
+import { ClockifyTimerStoppedDto, ClockifyTimerStoppedTimeInvervalDto } from '../clockify-api/dtos/clockifyEntryDto.dto';
 
 @Injectable()
 export class SundailService {
-  constructor(private readonly lp: LiquidPlannerApiService) {}
+  constructor(
+    private readonly lp: LiquidPlannerApiService,
+    private readonly clockify: ClockifyApiService
+  ) {}
 
   // PRIVATE FUNCTIONS
-  private getActivityId() {
-    return {
-      'billable': 293194,
-      'gifted': 302244, 
-      'internal': 293193, 
-      'leave': 293196, 
-      'mentoring': 308418, 
-      'pod': 306876, 
-      'professional development': 293197, 
-      'regressions': 293198,
-      'sales':302215,
-    }
-  }
-
   private calculateTimeDecimal(timeInterval: ClockifyTimerStoppedTimeInvervalDto) {
     const startDate = new Date(`${timeInterval.start}`)
     const endDate = new Date(`${timeInterval.end}`)
@@ -73,9 +63,10 @@ export class SundailService {
     event: ClockifyTimerStoppedDto
   ): Promise<void>{
     const duration = this.calculateTimeDecimal(event.timeInterval)
-    let activityId = 293194 //Billable Activity
+    // TEST THAT IT WILL FAIL WITHOUT AN ACTIVITY ID
+    let activityId = 293194 //Billable Activity Default
     if(event.tags.length > 0) {
-      activityId = this.getActivityId()[event.tags[0].toLowerCase()]
+      activityId = this.clockify.getActivityId[event.tags[0]]
     }
     
 
@@ -86,5 +77,15 @@ export class SundailService {
         work: duration
       }
     )
+  }
+
+  public async updateClockifyEntryWithLoggedTag(
+    event: ClockifyTimerStoppedDto
+  ): Promise<void>{
+    const loggedTagId = this.clockify.getLoggedTagId
+
+    await this.clockify.updateClockifyEntry(event.id, {
+      tagIds: [...event.tags, loggedTagId]
+    })
   }
 }

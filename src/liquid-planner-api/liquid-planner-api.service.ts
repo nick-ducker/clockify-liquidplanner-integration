@@ -26,7 +26,7 @@ export class LiquidPlannerApiService {
 
   get apiHeaders(): Record<string, string> {
     return {
-      'Authorization': `Bearer ${process.env.API_KEY}`,
+      'Authorization': `Bearer ${process.env.LP_API_KEY}`,
     }
   }
 

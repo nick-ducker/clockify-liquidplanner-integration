@@ -1,5 +1,5 @@
 import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
-import { ClockifyTimerStoppedDto } from './dtos/clockifyEntryDto.dto';
+import { ClockifyTimerStoppedDto } from '../clockify-api/dtos/clockifyEntryDto.dto';
 import { SundailService } from './sundail.service';
 
 @Controller('sundail')
@@ -20,6 +20,9 @@ export class SundailController {
 
         console.log("Updating LP entry")
         await this.sundailService.updateLpEntity(lpId, clockifyTimerStoppedDto)
+
+        console.log("Updating Clockify entry")
+        await this.sundailService.updateClockifyEntryWithLoggedTag(clockifyTimerStoppedDto)
       }
     } catch (e) {
       console.log(e)
