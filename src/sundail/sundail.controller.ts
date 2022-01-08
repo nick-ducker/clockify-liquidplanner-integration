@@ -15,8 +15,8 @@ export class SundailController {
   constructor(
     private readonly sundailService: SundailService,
     private readonly clockify: ClockifyApiService,
-    private readonly logger = new Logger(SundailController.name),
   ) {}
+  private readonly logger = new Logger(SundailController.name)
 
   @Post('/clockify-timer-stopped')
   async processEntry(

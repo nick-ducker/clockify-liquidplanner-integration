@@ -11,8 +11,8 @@ export class SundailService {
   constructor(
     private readonly lp: LiquidPlannerApiService,
     private readonly clockify: ClockifyApiService,
-    private readonly logger = new Logger(SundailService.name),
-  ) {}
+    ) {}
+  private readonly logger = new Logger(SundailService.name)
 
   // PRIVATE FUNCTIONS
   private calculateTimeDecimal(

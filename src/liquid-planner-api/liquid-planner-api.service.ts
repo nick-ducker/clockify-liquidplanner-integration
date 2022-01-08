@@ -5,10 +5,8 @@ import { GetTaskOptionsInterface } from './interfaces/getTaskOptions.interface';
 
 @Injectable()
 export class LiquidPlannerApiService {
-  constructor(
-    private readonly logger = new Logger(LiquidPlannerApiService.name),
-  ) {}
   // PRIVATE
+  private readonly logger = new Logger(LiquidPlannerApiService.name)
   private _client: AxiosInstance;
 
   // GETTERS
