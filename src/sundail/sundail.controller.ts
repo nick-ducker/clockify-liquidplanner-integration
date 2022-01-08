@@ -3,6 +3,7 @@ import {
   Controller,
   HttpException,
   HttpStatus,
+  Logger,
   Post,
 } from '@nestjs/common';
 import { ClockifyApiService } from 'src/clockify-api/clockify-api.service';
@@ -14,6 +15,8 @@ export class SundailController {
   constructor(
     private readonly sundailService: SundailService,
     private readonly clockify: ClockifyApiService,
+    private readonly logger = new Logger(SundailController.name),
+
   ) {}
 
   @Post('/clockify-timer-stopped')
@@ -25,7 +28,7 @@ export class SundailController {
         const mappedIds = clockifyTimerStoppedDto.tags.map((tag) => tag.id);
         const loggedTagIndex = mappedIds.indexOf(this.clockify.getLoggedTagId);
         if (loggedTagIndex >= 0) {
-          console.log('removing logged tag from unlogged entry');
+          this.logger.debug('removing logged tag from unlogged entry');
           await this.sundailService.modifyClockifyEntryLoggedTag(
             clockifyTimerStoppedDto,
             false,
@@ -34,25 +37,25 @@ export class SundailController {
         }
       }
 
-      console.log('checking entry description for LP flags');
+      this.logger.debug('checking entry description for LP flags');
       const lpFlag = this.sundailService.checkTimerEvent(
         clockifyTimerStoppedDto.description,
       );
 
       if (lpFlag) {
-        console.log('Determining LP entity ID');
+        this.logger.debug('Determining LP entity ID');
         const lpId = await this.sundailService.determineLpEntityId(lpFlag);
 
-        console.log('Updating LP entry');
+        this.logger.debug('Updating LP entry');
         await this.sundailService.updateLpEntity(lpId, clockifyTimerStoppedDto);
 
-        console.log('Updating Clockify entry');
+        this.logger.debug('Updating Clockify entry');
         await this.sundailService.modifyClockifyEntryLoggedTag(
           clockifyTimerStoppedDto,
         );
       }
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -61,7 +64,7 @@ export class SundailController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     } finally {
-      console.log('Done');
+      this.logger.debug('Done');
     }
   }
 }

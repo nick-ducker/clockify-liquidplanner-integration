@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 import { LiquidPlannerTaskDto } from './dtos/liquidPlannerTask.dto';
 import { GetTaskOptionsInterface } from './interfaces/getTaskOptions.interface';
 
 @Injectable()
 export class LiquidPlannerApiService {
+  constructor(
+    private readonly logger = new Logger(LiquidPlannerApiService.name),
+  ){}
   // PRIVATE
   private _client: AxiosInstance;
 
@@ -70,6 +73,6 @@ export class LiquidPlannerApiService {
     await this.client.post(`tasks/${task_id}/track_time?append=true`, {
       ...workObj,
     });
-    console.log(`Lp Task ${task_id} updated`);
+    this.logger.debug(`Lp Task ${task_id} updated`);
   }
 }

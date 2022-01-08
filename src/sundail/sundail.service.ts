@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ClockifyApiService } from 'src/clockify-api/clockify-api.service';
 import { LiquidPlannerApiService } from 'src/liquid-planner-api/liquid-planner-api.service';
 import {
@@ -11,6 +11,7 @@ export class SundailService {
   constructor(
     private readonly lp: LiquidPlannerApiService,
     private readonly clockify: ClockifyApiService,
+    private readonly logger = new Logger(SundailService.name),
   ) {}
 
   // PRIVATE FUNCTIONS
@@ -39,8 +40,8 @@ export class SundailService {
     const flagLength = lpFlag.split('').length;
     let lpId: number;
     if (flagLength <= 5) {
-      console.log('Zoho ticket ID detected');
-      console.log(`Searching LP using naming convention "ZOHO-${lpFlag}"`);
+      this.logger.debug('Zoho ticket ID detected');
+      this.logger.debug(`Searching LP using naming convention "ZOHO-${lpFlag}"`);
 
       const tasks = await this.lp.getTasks({
         filters: [
@@ -58,7 +59,7 @@ export class SundailService {
 
       lpId = tasks[0].id;
     } else {
-      console.log('LP Task ID detected');
+      this.logger.debug('LP Task ID detected');
       lpId = Number(lpFlag);
     }
 
@@ -70,7 +71,6 @@ export class SundailService {
     event: ClockifyTimerStoppedDto,
   ): Promise<void> {
     const duration = this.calculateTimeDecimal(event.timeInterval);
-    // TEST THAT IT WILL FAIL WITHOUT AN ACTIVITY ID
     let activityId = 293194; //Billable Activity Default
     if (event.tags.length === 1) {
       activityId = this.clockify.getActivityId[event.tags[0].id];
