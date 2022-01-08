@@ -77,12 +77,17 @@ export class SundailService {
     )
   }
 
-  public async updateClockifyEntryWithLoggedTag(
-    event: ClockifyTimerStoppedDto
+  public async modifyClockifyEntryLoggedTag(
+    event: ClockifyTimerStoppedDto,
+    add: boolean = true,
   ): Promise<void>{
     const loggedTagId = this.clockify.getLoggedTagId
     let tagIdsArr = event.tags.map(tag => tag.id)
-    tagIdsArr.push(loggedTagId)
+    if(add) {
+      tagIdsArr.push(loggedTagId)
+    } else {
+      tagIdsArr.splice(tagIdsArr.indexOf(loggedTagId),1)
+    }
 
     await this.clockify.updateClockifyEntry(event.id, {
       start: event.timeInterval.start,
