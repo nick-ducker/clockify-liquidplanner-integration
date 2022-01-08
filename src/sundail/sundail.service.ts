@@ -9,6 +9,7 @@ export class SundailService {
   // PRIVATE FUNCTIONS
   private getActivityId() {
     return {
+      'billable': 293194,
       'gifted': 302244, 
       'internal': 293193, 
       'leave': 293196, 
@@ -77,6 +78,8 @@ export class SundailService {
       activityId = this.getActivityId()[event.tags[0].toLowerCase()]
     }
     
+
+    //TODO: Update this task to take a user ID
     await this.lp.logTimeAgainstTask(
       lpId, {
         activity_id: activityId,
