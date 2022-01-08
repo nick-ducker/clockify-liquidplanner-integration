@@ -41,7 +41,9 @@ export class SundailService {
     let lpId: number;
     if (flagLength <= 5) {
       this.logger.debug('Zoho ticket ID detected');
-      this.logger.debug(`Searching LP using naming convention "ZOHO-${lpFlag}"`);
+      this.logger.debug(
+        `Searching LP using naming convention "ZOHO-${lpFlag}"`,
+      );
 
       const tasks = await this.lp.getTasks({
         filters: [

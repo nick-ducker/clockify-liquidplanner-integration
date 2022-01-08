@@ -7,7 +7,7 @@ import { GetTaskOptionsInterface } from './interfaces/getTaskOptions.interface';
 export class LiquidPlannerApiService {
   constructor(
     private readonly logger = new Logger(LiquidPlannerApiService.name),
-  ){}
+  ) {}
   // PRIVATE
   private _client: AxiosInstance;
 
