@@ -12,6 +12,6 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
-    command: npm run start:dev
+    command: sh -c "yarn && npm run start:dev"
     env_file:
       - .env

@@ -9,15 +9,17 @@ import {
 import { ClockifyApiService } from 'src/clockify-api/clockify-api.service';
 import { ClockifyTimerStoppedDto } from '../clockify-api/dtos/clockifyEntryDto.dto';
 import { SundailService } from './sundail.service';
+import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry';
 
 @Controller('sundail')
 export class SundailController {
   constructor(
     private readonly sundailService: SundailService,
     private readonly clockify: ClockifyApiService,
+    @InjectSentry() private readonly sentry: SentryService
   ) {}
   private readonly logger = new Logger(SundailController.name);
-
+  
   @Post('/clockify-timer-stopped')
   async processEntry(
     @Body() clockifyTimerStoppedDto: ClockifyTimerStoppedDto,
@@ -55,6 +57,7 @@ export class SundailController {
       }
     } catch (e) {
       this.logger.error(e);
+      this.sentry.instance().captureException(e)
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
