@@ -72,6 +72,10 @@ export class SundailService {
     lpId: number,
     event: ClockifyTimerStoppedDto,
   ): Promise<void> {
+    const lpUserId = this.lp.lpUserNameToId[event.user.name]
+    if(!lpUserId) {
+      throw new Error(`Could not resolve clockify user name ${event.user.name} to LP id`)
+    }
     const duration = this.calculateTimeDecimal(event.timeInterval);
     let activityId = 293194; //Billable Activity Default
     if (event.tags.length === 1) {
@@ -79,6 +83,7 @@ export class SundailService {
     }
     //TODO: Update this task to take a user ID
     await this.lp.logTimeAgainstTask(lpId, {
+      member_id: lpUserId,
       activity_id: activityId,
       work: duration,
     });

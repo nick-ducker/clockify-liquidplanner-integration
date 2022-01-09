@@ -89,6 +89,7 @@ export class LiquidPlannerApiService implements OnModuleInit {
   public async logTimeAgainstTask(
     task_id: number,
     workObj: {
+      member_id: number
       activity_id: number;
       work: number;
     },
