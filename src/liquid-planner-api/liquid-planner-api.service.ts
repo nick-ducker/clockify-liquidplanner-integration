@@ -7,26 +7,28 @@ import { GetTaskOptionsInterface } from './interfaces/getTaskOptions.interface';
 @Injectable()
 export class LiquidPlannerApiService implements OnModuleInit {
   // PRIVATE
-  private readonly logger = new Logger(LiquidPlannerApiService.name)
+  private readonly logger = new Logger(LiquidPlannerApiService.name);
   private _client: AxiosInstance;
-  private lpUsers: Record<string, number> = {}
-  
+  private lpUsers: Record<string, number> = {};
+
   // On Module Init
   async onModuleInit(): Promise<void> {
     try {
-      let users: LpUserDto[]
-      const { data } = await this.client.get('members')
-      users = data
-      users.forEach(user =>{
-        if(!user.is_virtual && user.id > 0) {
-          this.lpUsers[`${user.first_name} ${user.last_name}`] = user.id
+      let users: LpUserDto[];
+      const { data } = await this.client.get('members');
+      users = data;
+      users.forEach((user) => {
+        if (!user.is_virtual && user.id > 0) {
+          this.lpUsers[`${user.first_name} ${user.last_name}`] = user.id;
         }
-      })
-      this.logger.debug(`Pulled ${Object.keys(this.lpUsers).length} current LP users`)
+      });
+      this.logger.debug(
+        `Pulled ${Object.keys(this.lpUsers).length} current LP users`,
+      );
     } catch (e) {
       this.logger.error('Unable to fetch LP users, terminating application');
       this.logger.error(e);
-      process.exit(1)
+      process.exit(1);
     }
   }
 
@@ -56,7 +58,7 @@ export class LiquidPlannerApiService implements OnModuleInit {
   }
 
   get lpUserNameToId(): Record<string, number> {
-    return this.lpUsers
+    return this.lpUsers;
   }
 
   // PUBLIC
@@ -89,7 +91,7 @@ export class LiquidPlannerApiService implements OnModuleInit {
   public async logTimeAgainstTask(
     task_id: number,
     workObj: {
-      member_id: number
+      member_id: number;
       activity_id: number;
       work: number;
     },

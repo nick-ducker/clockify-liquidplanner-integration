@@ -11,8 +11,8 @@ export class SundailService {
   constructor(
     private readonly lp: LiquidPlannerApiService,
     private readonly clockify: ClockifyApiService,
-    ) {}
-  private readonly logger = new Logger(SundailService.name)
+  ) {}
+  private readonly logger = new Logger(SundailService.name);
 
   // PRIVATE FUNCTIONS
   private calculateTimeDecimal(
@@ -72,9 +72,11 @@ export class SundailService {
     lpId: number,
     event: ClockifyTimerStoppedDto,
   ): Promise<void> {
-    const lpUserId = this.lp.lpUserNameToId[event.user.name]
-    if(!lpUserId) {
-      throw new Error(`Could not resolve clockify user name ${event.user.name} to LP id`)
+    const lpUserId = this.lp.lpUserNameToId[event.user.name];
+    if (!lpUserId) {
+      throw new Error(
+        `Could not resolve clockify user name ${event.user.name} to LP id`,
+      );
     }
     const duration = this.calculateTimeDecimal(event.timeInterval);
     let activityId = 293194; //Billable Activity Default
