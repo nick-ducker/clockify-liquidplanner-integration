@@ -58,7 +58,7 @@ export class ClockifyApiService {
     id: string,
     entry: ClockifyEntryPostInterface,
   ) {
-   const resp = await this.client.put(`time-entries/${id}`, entry);
-   this.logger.debug(JSON.stringify(resp))
+    const resp = await this.client.put(`time-entries/${id}`, entry);
+    console.log(resp)
   }
 }
