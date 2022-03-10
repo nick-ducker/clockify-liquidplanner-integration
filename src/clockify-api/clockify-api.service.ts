@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 import { ClockifyTimerStoppedDto } from './dtos/clockifyEntryDto.dto';
 import { ClockifyEntryPostInterface } from './interfaces/clockifyEntryPost.interface';
 @Injectable()
 export class ClockifyApiService {
+  private readonly logger = new Logger(ClockifyApiService.name);
+
   // PRIVATE
   private _client: AxiosInstance;
 
@@ -56,6 +58,7 @@ export class ClockifyApiService {
     id: string,
     entry: ClockifyEntryPostInterface,
   ) {
-    await this.client.put(`time-entries/${id}`, entry);
+   const resp = await this.client.put(`time-entries/${id}`, entry);
+   this.logger.debug(JSON.stringify(resp))
   }
 }
