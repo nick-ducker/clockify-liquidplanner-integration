@@ -28,10 +28,18 @@ export class SundailService {
 
   // PUBLIC FUNCTIONS
   public checkTimerEvent(description: string): string {
-    const regexPattern = /(?<=\{)(.*?)(?=\})/;
-    const match = description.match(regexPattern);
-    if (match) {
-      return match[0];
+    // Check for {NUMBER} first
+    const curlyRegex = /(?<=\{)(.*?)(?=\})/;
+    const curlyMatch = description.match(curlyRegex);
+    if (curlyMatch) {
+      return curlyMatch[0];
+    }
+
+    // Check for #NUMBER second
+    const hashRegex = /(?<=#)[0-9]*/;
+    const hashMatch = description.match(hashRegex);
+    if (hashMatch) {
+      return hashMatch[0];
     }
     return '';
   }
