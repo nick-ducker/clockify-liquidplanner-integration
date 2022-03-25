@@ -10,6 +10,7 @@ stages:
 
 variables:
   DOCKER_HOST: tcp://localhost:2375/
+  DOCKER_TLS_CERTDIR: ""
   RELEASE_TAG: latest
   VERSION_TAG: $CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID
 
