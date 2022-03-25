@@ -37,7 +37,7 @@ deploy:
     - docker push $CI_REGISTRY_IMAGE:$RELEASE_TAG
     - gcloud auth activate-service-account --key-file "${MISC_GCLOUD_SERVICE_ACCOUNT_KEY}"
     - gcloud container clusters get-credentials dev-cluster --zone australia-southeast1-a --project cluster-dev-294103
-    - helm upgrade --install --wait --namespace=clockify-lp-int --create-namespace
+    - helm upgrade --install --wait --namespace=clockify-lp-int
       --set image.tag=$VERSION_TAG
       --set gitlab.app=$CI_PROJECT_PATH_SLUG
       --set gitlab.env=$CI_ENVIRONMENT_SLUG

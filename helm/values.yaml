@@ -10,7 +10,7 @@ image:
   tag: latest
 
 imagePullSecrets:
-  - name: gitlab-registry-lp-webhooks
+  - name: gitlab-registry-clockify-lp-int
 nameOverride: ""
 fullnameOverride: ""
 
