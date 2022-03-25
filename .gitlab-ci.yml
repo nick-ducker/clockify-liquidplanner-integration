@@ -1,16 +1,12 @@
 image: docker:git
 services:
-  - name: docker:18.09.8-dind
-    entrypoint: ["dockerd"]
-    command: ["--tls=false", "--host=tcp://localhost:2375"]
+  - docker:18.09.7-dind
 
 stages:
   - build
   - deploy
 
 variables:
-  DOCKER_HOST: tcp://localhost:2375/
-  DOCKER_TLS_CERTDIR: ""
   RELEASE_TAG: latest
   VERSION_TAG: $CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID
 
