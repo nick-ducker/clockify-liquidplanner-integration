@@ -1,6 +1,6 @@
 image: docker:git
 services:
-  - name: docker:20.10.12-dind
+  - name: docker:18.09.8-dind
     entrypoint: ["dockerd"]
     command: ["--tls=false", "--host=tcp://localhost:2375"]
 
