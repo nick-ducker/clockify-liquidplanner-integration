@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "clockify-lp-int.fullname" . }}
+  {{- if .Values.gitlab.enabled }}
+  annotations:
+    {{- include "clockify-lp-int.gitlab-annotations" . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "clockify-lp-int.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: {{ include "clockify-lp-int.fullname" . }}-ingress-cert
+      hosts:
+        - {{ .Values.ingress.host | quote }}
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.ingress.host | quote }}
+      tls:
+        httpsRedirect: false

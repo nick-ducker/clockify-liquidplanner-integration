@@ -1,0 +1,51 @@
+# Default values for clockify-lp-int.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/atomix/clockify-lp-int
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imagePullSecrets:
+  - name: gitlab-registry-lp-webhooks
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+gitlab:
+  enabled: true
+  app: <replace_me>
+  env: <replace_me>
+
+ingress:
+  host: clockify-lp-int.k8s.atomix.dev
+
+resources:
+   limits:
+     cpu: 250m
+     memory: 512Mi
+   requests:
+     cpu: 100m
+     memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+auth:
+  enabled: false
+  username: atomix
+  password: atomix
+
+env:
+  clockifyKey: <replace_me>
+  lpKey: <replace_me>

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "clockify-lp-int.fullname" . }}
+  {{- if .Values.gitlab.enabled }}
+  annotations:
+    {{- include "clockify-lp-int.gitlab-annotations" . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "clockify-lp-int.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "clockify-lp-int.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- if .Values.gitlab.enabled }}
+      annotations:
+        {{- include "clockify-lp-int.gitlab-annotations" . | nindent 8 }}
+      {{- end }}
+        co.elastic.logs/json.keys_under_root: "true"
+        co.elastic.logs/json.overwrite_keys: "true"
+        co.elastic.logs/json.add_error_key: "true"
+        co.elastic.logs/json.expand_keys: "true"
+      labels:
+        {{- include "clockify-lp-int.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  {{- include "clockify-lp-int.selectorLabels" . | nindent 18 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /healthz
+          env:
+            - name: CLOCKIFY_API_KEY
+              value: {{ .Values.env.clockifyKey }}
+            - name: CLOCKIFY_API_KEY
+              value: {{ .Values.env.lpKey }}
+          ports:
+            - name: http-node
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
