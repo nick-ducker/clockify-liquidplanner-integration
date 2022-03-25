@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: {{ include "clockify-lp-int.fullname" . }}-ingress-cert
+  namespace: istio-system
+  {{- if .Values.gitlab.enabled }}
+  annotations:
+    {{- include "clockify-lp-int.gitlab-annotations" . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "clockify-lp-int.labels" . | nindent 4 }}
+spec:
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  secretName: {{ include "clockify-lp-int.fullname" . }}-ingress-cert
+  commonName: {{ .Values.ingress.host | quote }}
+  dnsNames:
+    - {{ .Values.ingress.host | quote }}
