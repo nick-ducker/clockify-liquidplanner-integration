@@ -1,15 +1,15 @@
 image: docker:git
 services:
-  - name: docker:18.09.7-dind
-    alias: docker
-    command: [ "--tls=false" ]
+  - name: docker:20.10.12-dind
+    entrypoint: ["dockerd"]
+    command: ["--tls=false", "--host=tcp://localhost:2375"]
 
 stages:
   - build
   - deploy
 
 variables:
-  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_HOST: tcp://localhost:2375/
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
   RELEASE_TAG: latest
