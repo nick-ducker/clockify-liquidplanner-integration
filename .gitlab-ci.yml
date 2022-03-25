@@ -45,4 +45,4 @@ deploy:
       --set env.lpKey=$LP_API_KEY
       clockify-lp-int ./helm
   only:
-    - main
+    - master
