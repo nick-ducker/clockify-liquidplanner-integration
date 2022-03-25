@@ -48,7 +48,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 3000
-              path: /healthz
+              path: /ping
           env:
             - name: CLOCKIFY_API_KEY
               value: {{ .Values.env.clockifyKey }}
