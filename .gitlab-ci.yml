@@ -1,12 +1,16 @@
 image: docker:git
 services:
-  - docker:18.09.7-dind
+  - name: docker:18.09.7-dind
+    alias: docker
+    command: [ "--tls=false" ]
+
 
 stages:
   - build
   - deploy
 
 variables:
+  DOCKER_HOST: tcp://docker:2375
   RELEASE_TAG: latest
   VERSION_TAG: $CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID
 
