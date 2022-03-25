@@ -52,7 +52,7 @@ spec:
           env:
             - name: CLOCKIFY_API_KEY
               value: {{ .Values.env.clockifyKey }}
-            - name: CLOCKIFY_API_KEY
+            - name: LP_API_KEY
               value: {{ .Values.env.lpKey }}
           ports:
             - name: http-node
