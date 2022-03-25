@@ -1,14 +1,12 @@
-image: alpine:latest
+image: docker:git
 services:
-  - docker:dind
+  - docker:18.09.7-dind
 
 stages:
   - build
   - deploy
 
 variables:
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_DRIVER: overlay2
   RELEASE_TAG: latest
   VERSION_TAG: $CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID
 
