@@ -41,6 +41,8 @@ deploy:
       --set image.tag=$VERSION_TAG
       --set gitlab.app=$CI_PROJECT_PATH_SLUG
       --set gitlab.env=$CI_ENVIRONMENT_SLUG
+      --set env.clockifyKey=$CLOCKIFY_API_KEY
+      --set env.lpKey=$LP_API_KEY
       clockify-lp-int ./helm
   only:
     - main
