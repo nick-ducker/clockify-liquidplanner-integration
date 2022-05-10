@@ -96,7 +96,7 @@ export class LiquidPlannerApiService implements OnModuleInit {
       work: number;
     },
   ): Promise<void> {
-    await this.client.post(`tasks/${task_id}/track_time?append=true`, {
+    await this.client.post(`tasks/${task_id}/track_time?append=true&reduce_estimate=true`, {
       ...workObj,
     });
     this.logger.debug(`Lp Task ${task_id} updated`);
